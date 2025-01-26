@@ -4,8 +4,9 @@ use {
     std::thread,
 };
 
-/// Maximum number of tasks that can be queued. If this limit is reached, the oldest task is dropped.
-/// If you don't want ro drop tasks, you can increase this limit.
+/// Maximum number of tasks that can be queued. If this limit is reached, no new task will be queued.
+///
+/// If you don't want ro drop tasks, use `channel::unbounded` instead of `channed::bounded` when creating `s_task`
 const MAX_QUEUED_TASKS: usize = 3;
 
 /// Manage a thread to execute tasks
@@ -30,6 +31,7 @@ impl Worker {
                     recv(r_task) -> ps => {
                         match ps {
                             Ok(task) => {
+                                if !r_die.is_empty() { continue; }
                                 let _ = r_cancel.try_recv(); // clean any unconsumed cancel
                                 match task.execute(r_cancel.clone()) {
                                     Ok(()) => {
@@ -69,7 +71,7 @@ impl Worker {
     }
     /// Request the current task to be interrupted
     pub fn cancel_current_task(&self) {
-        let _ = self.s_cancel.send(());
+        let _ = self.s_cancel.try_send(());
     }
     /// Make the worker stop
     /// (interrupting the current task if any)

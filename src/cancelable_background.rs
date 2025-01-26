@@ -10,7 +10,7 @@ use {
 
 /// The task to execute
 pub struct Task {
-    id: usize,
+    pub id: usize,
     // probably more fields
 }
 
