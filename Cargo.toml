@@ -1,0 +1,16 @@
+[package]
+name = "blog-cancelable-background-task"
+version = "0.1.0"
+edition = "2021"
+authors = ["dystroy <denys.seguret@gmail.com>"]
+repository = "https://github.com/Canop/blog-cancelable-background-task"
+description = "an example for my blog"
+edition = "2024"
+keywords = ["cli"]
+license = "MIT"
+categories = ["command-line-utilities"]
+readme = "README.md"
+
+[dependencies]
+crossbeam = "0.8"
+crossterm = "0.28"
